@@ -7,12 +7,13 @@
     </p>
     <div class="container">
       <div>
-        <b-form @submit.stop.prevent="passes(onSubmit)">
+        <b-form>
           <b-input-group prepend="Base URL:" class="mt-3">
             <b-form-input 
               v-bind:disabled="comparing" 
               v-model="urlBase"
-              v-bind:required ="true">
+              v-bind:required ="true"
+              placeholder="https://www.google.com">
             </b-form-input>
           </b-input-group>
 
@@ -20,7 +21,8 @@
             <b-form-input 
               v-bind:disabled="comparing" 
               v-model="urlTarget"
-              v-bind:required ="true">
+              v-bind:required ="true"
+              placeholder="https://www.google.com?q=hola">>
             </b-form-input>
             <b-input-group-append>
               <b-button type="submit" variant="outline-success" v-bind:disabled="comparing" v-on:click="analize"> Validate </b-button>
@@ -76,8 +78,8 @@ export default {
       comparing: false,
       showResults: false,
       results : "",
-      urlBase : "https://www.google.com",
-      urlTarget : "https://yahoo.com"
+      urlBase : "",
+      urlTarget : ""
     }
   },
   methods: {
@@ -88,11 +90,19 @@ export default {
       this.alert.message = message;
       this.alert.variant = variant;
       this.dismissCountDown = this.dismissSecs
+    }, 
+    validateUrl(url) {
+       try {
+          new URL(url).toString();
+          return true;
+        } catch (e) {
+          return false;
+        }
     },
     analize: function () {
-      if (this.urlBase ==='' || this.urlTarget === ''){
-        this.showAlert('Please fill in the required fields', 'warning');
-        return;
+      if (!this.validateUrl(this.urlBase) || !this.validateUrl(this.urlTarget)){
+        this.showAlert('Please enter valid HTTPS urls', 'warning');
+        return false;
       }
 
       this.comparing = true;
@@ -145,7 +155,7 @@ a {
 
 .image-border{
   border-width: 3px;
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .alert{
