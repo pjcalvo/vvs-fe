@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1 class="hoodoo-color">{{ msg }}</h1>
     <br>
     <p>
       What are you comparing today:
@@ -9,7 +9,7 @@
       <div>
         <b-form>
           <b-input-group prepend="Base URL:" class="mt-3">
-            <b-form-input 
+            <b-form-input
               v-bind:disabled="comparing" 
               v-model="urlBase"
               v-bind:required ="true"
@@ -35,14 +35,32 @@
     <p v-if="comparing">Loading results...</p>
     <div class="container results">
       <b-spinner v-if="comparing" label="Spinning"></b-spinner>
-      <b-row v-if="showResults" class="detailed-results">
+      <b-row 
+      v-if="showResults" 
+      class="detailed-results">
         <b-col class="result sm-6" >
           <p>Base URL</p>
-          <b-img-lazy class="image-border" thumbnail v-bind:src="results.message.base.file" fluid alt="Responsive image"></b-img-lazy>
+          <b-link 
+            @click="showModal('Base screenshot', results.message.base.file)">
+            <b-img-lazy 
+            class="image-border" 
+            thumbnail 
+            @click="showModal('Base screenshot', results.message.base.file)"
+            v-bind:src="results.message.base.file"
+            fluid alt="Responsive image"></b-img-lazy>
+          </b-link>
         </b-col>
         <b-col class="result sm-6" >
           <p>Target URL</p>
-          <b-img-lazy class="image-border" danger thumbnail v-bind:src="results.message.targets[0].file" fluid alt="Responsive image"></b-img-lazy>
+            <b-link 
+            @click="showModal('Result: ' + results.message.targets[0].notes, results.message.targets[0].file)">
+              <b-img-lazy 
+              class="image-border"
+              thumbnail 
+              v-bind:src="results.message.targets[0].file" 
+              fluid alt="Responsive image">
+              </b-img-lazy>
+            </b-link>
         </b-col>
         <p class="align-center"></p>
       </b-row>
@@ -57,6 +75,21 @@
     >
       {{this.alert.message}}
     </b-alert>
+    <b-modal 
+    :title="modal.title"
+    id="gallery-modal" 
+    size="lg"
+    v-model="modal.show"
+    hide-footer>
+    
+    <div class="d-block text-center">
+      <b-img-lazy
+      v-bind:src="modal.src"
+      fluid 
+      alt="Responsive image">
+      </b-img-lazy>
+    </div>
+  </b-modal>
   </div>
 </template>
 
@@ -73,6 +106,11 @@ export default {
         message:'default message',
         variant: 'info'
       },
+      modal: {
+        title: 'DEFAULT TITLE',
+        src:'',
+        show: false
+      },
       dismissSecs: 5,
       dismissCountDown: 0,
       comparing: false,
@@ -85,6 +123,11 @@ export default {
   methods: {
     countDownChanged(dismissCountDown) {
         this.dismissCountDown = dismissCountDown
+    },
+    showModal(title, src){
+      this.modal.show = true;
+      this.modal.title = title;
+      this.modal.src = src;
     },
     showAlert(message, variant) {
       this.alert.message = message;
@@ -163,4 +206,14 @@ a {
   width: 100%;
   top: 0px;
 }
+
+.hoodoo-color{
+  color: #b34031;
+  margin-top: 10px;
+}
+
+.hover:hover{
+   cursor: pointer;
+}
+
 </style>

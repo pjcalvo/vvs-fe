@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img class="logo" alt="Vue logo" src="./assets/logo.png">
+    <img class="logo" alt="Vue logo" src="./assets/logo.svg">
     <Hello msg="Visual Validation Service"/>
   </div>
 </template>
@@ -27,6 +27,6 @@ export default {
 }
 
 .logo{
-  max-width: 50px;
+  max-height: 78px;
 }
 </style>
